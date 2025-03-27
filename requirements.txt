@@ -5,4 +5,5 @@ langchain-core=0.3.49
 langchain-google-genai=2.1.1
 langchain_huggingface=0.1.2
 langchain_qdrant=0.2.0
+python-dotenv=1.0.1
 qdrant_client=1.13.3
