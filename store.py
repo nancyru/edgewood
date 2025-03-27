@@ -1,8 +1,6 @@
-import pickle
-
 from langchain_core.documents import Document
 from langchain_community.document_loaders import JSONLoader
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain.text_splitter import CharacterTextSplitter
 from qdrant_client import models, QdrantClient
@@ -36,7 +34,7 @@ def chunk_docs(documents):
     """
     Chunk docs
     """
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_splitter = CharacterTextSplitter(chunk_size=7000, chunk_overlap=500)
     docs = text_splitter.split_documents(documents)
     return docs
 
@@ -46,9 +44,8 @@ def initialize_vector_store():
     Create Qdrant vector store with embeddings.
     """
 
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-mpnet-base-v2"
-    )
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+
     dimension = len(
         embeddings.embed_query("I just want to know the embedding space dimension")
     )

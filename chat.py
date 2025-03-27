@@ -49,7 +49,7 @@ class ChatChain:
         return create_stuff_documents_chain(self.chat_model, question_answering_prompt)
 
     def query_rag(self, query):
-        relevant_docs = self.vector_store.similarity_search(query, k=3)
+        relevant_docs = self.vector_store.similarity_search(query, k=20)
         reply = self.chat_chain.invoke(
             {
                 "context": relevant_docs,
