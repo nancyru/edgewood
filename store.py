@@ -1,0 +1,82 @@
+import pickle
+
+from langchain_core.documents import Document
+from langchain_community.document_loaders import JSONLoader
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_qdrant import QdrantVectorStore
+from langchain.text_splitter import CharacterTextSplitter
+from qdrant_client import models, QdrantClient
+from qdrant_client.http.models import Distance, VectorParams
+
+
+PATH_TO_JSON_DATA = "firecrawl_processed.json"
+
+
+# Define the metadata extraction function.
+def metadata_func(record: dict, metadata: dict) -> dict:
+
+    metadata["url"] = record.get("metadata").get("url")
+    return metadata
+
+
+def load_docs(path=PATH_TO_JSON_DATA):
+    """Load data into LangChain documents"""
+    loader = JSONLoader(
+        file_path=path,
+        jq_schema=".data[]",
+        content_key="markdown",
+        metadata_func=metadata_func,
+    )
+
+    documents = loader.load()
+    return documents
+
+
+def chunk_docs(documents):
+    """
+    Chunk docs
+    """
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    docs = text_splitter.split_documents(documents)
+    return docs
+
+
+def initialize_vector_store():
+    """
+    Create Qdrant vector store with embeddings.
+    """
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-mpnet-base-v2"
+    )
+    dimension = len(
+        embeddings.embed_query("I just want to know the embedding space dimension")
+    )
+
+    client = QdrantClient(":memory:")
+
+    client.create_collection(
+        collection_name="edgewood",
+        vectors_config=models.VectorParams(
+            size=dimension,  # Vector size is defined by used model
+            distance=models.Distance.COSINE,
+        ),
+    )
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name="edgewood",
+        embedding=embeddings,
+    )
+    return vector_store
+
+
+def create_vector_store(test=False):
+    documents = load_docs()
+    if test:
+        documents = documents[:10]
+    chunked_docs = chunk_docs(documents)
+    vector_store = initialize_vector_store()
+
+    # load vector database
+    vector_store.add_documents(documents=chunked_docs)
+    return vector_store
