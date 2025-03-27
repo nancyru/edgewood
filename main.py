@@ -1,5 +1,3 @@
-import argparse
-
 import gradio as gr
 
 from chat import ChatChain
