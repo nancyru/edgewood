@@ -7,7 +7,7 @@ from qdrant_client import models, QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 
 
-PATH_TO_JSON_DATA = "firecrawl_processed.json"
+PATH_TO_JSON_DATA = "data/firecrawl_processed.json"
 
 
 # Define the metadata extraction function.
