@@ -6,3 +6,5 @@ The *Friends of Edgewood* is all-volunteer, donor-funded, non-profit that suppor
 hiking trails, and volunteer opportunities.
 
 The chatbot was built using LangChain, makes use of Google Gemini models and embeddings, and has a Gradio frontend.  Firecrawl was used to crawl and process web data, which is stored in a Qdrant vector database.
+
+![chatbot screenshot](chatbot_screenshot.png)
