@@ -27,6 +27,9 @@ class ChatChain:
         self.chat_chain = self.initialize_chat_chain()
 
     def get_gemini_chat_model(self):
+        """
+        Initialize chat model with Google Gemini.
+        """
         return ChatGoogleGenerativeAI(
             model="gemini-2.0-flash",
             temperature=0,
@@ -36,7 +39,9 @@ class ChatChain:
         )
 
     def initialize_chat_chain(self):
-
+        """
+        Initialize LangChain chain with chat model and templates.
+        """
         question_answering_prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -49,6 +54,9 @@ class ChatChain:
         return create_stuff_documents_chain(self.chat_model, question_answering_prompt)
 
     def query_rag(self, query):
+        """
+        Retrieve relevant documents from vector database.
+        """
         relevant_docs = self.vector_store.similarity_search(query, k=20)
         reply = self.chat_chain.invoke(
             {
@@ -59,6 +67,9 @@ class ChatChain:
         return reply
 
     def gradio_predict(self, message, history):
+        """
+        Gradio-friendly chat response function.
+        """
         history_langchain_format = []
         for msg in history:
             if msg["role"] == "user":
