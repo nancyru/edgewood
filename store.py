@@ -1,26 +1,27 @@
-import pickle
-
 from langchain_core.documents import Document
 from langchain_community.document_loaders import JSONLoader
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain.text_splitter import CharacterTextSplitter
 from qdrant_client import models, QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 
 
-PATH_TO_JSON_DATA = "firecrawl_processed.json"
+PATH_TO_JSON_DATA = "data/firecrawl_processed.json"
 
 
-# Define the metadata extraction function.
 def metadata_func(record: dict, metadata: dict) -> dict:
-
+    """
+    Define the metadata extraction function.
+    """
     metadata["url"] = record.get("metadata").get("url")
     return metadata
 
 
 def load_docs(path=PATH_TO_JSON_DATA):
-    """Load data into LangChain documents"""
+    """
+    Load json data into LangChain documents.
+    """
     loader = JSONLoader(
         file_path=path,
         jq_schema=".data[]",
@@ -34,21 +35,20 @@ def load_docs(path=PATH_TO_JSON_DATA):
 
 def chunk_docs(documents):
     """
-    Chunk docs
+    Chunk documents.
     """
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_splitter = CharacterTextSplitter(chunk_size=7000, chunk_overlap=500)
     docs = text_splitter.split_documents(documents)
     return docs
 
 
 def initialize_vector_store():
     """
-    Create Qdrant vector store with embeddings.
+    Initialize Qdrant vector store with embeddings.
     """
 
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-mpnet-base-v2"
-    )
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+
     dimension = len(
         embeddings.embed_query("I just want to know the embedding space dimension")
     )
@@ -58,7 +58,7 @@ def initialize_vector_store():
     client.create_collection(
         collection_name="edgewood",
         vectors_config=models.VectorParams(
-            size=dimension,  # Vector size is defined by used model
+            size=dimension,
             distance=models.Distance.COSINE,
         ),
     )
@@ -71,12 +71,13 @@ def initialize_vector_store():
 
 
 def create_vector_store(test=False):
+    """
+    Initialize vector store and add documents.
+    """
     documents = load_docs()
     if test:
         documents = documents[:10]
     chunked_docs = chunk_docs(documents)
     vector_store = initialize_vector_store()
-
-    # load vector database
     vector_store.add_documents(documents=chunked_docs)
     return vector_store
