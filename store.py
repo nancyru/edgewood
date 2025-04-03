@@ -7,7 +7,7 @@ from qdrant_client import models, QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 
 
-PATH_TO_JSON_DATA = "data/firecrawl_processed.json"
+PATH_TO_JSON_DATA = "data/firecrawl_result.json"
 
 
 def metadata_func(record: dict, metadata: dict) -> dict:
