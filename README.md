@@ -10,7 +10,8 @@ The chatbot was built using LangChain, makes use of Google Gemini models and emb
 The chatbot makes use of chat history, and responses are formatted with images and links.
 
 <p align="center">
-<img src="images/edgewood_tree_table.png">
-<img src="images/edgewood_tree_photos.png">
-<img src="images/edgewood_birds.png">
+<img src="images/edgewood_screenshot1.png">
+<img src="images/edgewood_screenshot2.png">
+<img src="images/edgewood_screenshot3.png">
+<img src="images/edgewood_screenshot4.png">
 </p>
