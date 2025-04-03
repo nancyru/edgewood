@@ -7,9 +7,10 @@ hiking trails, and volunteer opportunities.
 
 The chatbot was built using LangChain, makes use of Google Gemini models and embeddings, and has a Gradio frontend.  Firecrawl was used to crawl and process web data, which is stored in a Qdrant vector database.  
 
-Responses incorporate chat history and include images and links.
+The chatbot makes use of chat history, and responses are formatted with images and links.
 
-![chatbot screenshot 1](images/edgewood_screenshot1.png)
-![chatbot screenshot 2](images/edgewood_screenshot2.png)
-![chatbot screenshot 3](images/edgewood_screenshot3.png)
-![chatbot screenshot 4](images/edgewood_screenshot4.png)
+<p align="center">
+<img src="images/edgewood_tree_table.png">
+<img src="images/edgewood_tree_photos.png">
+<img src="images/edgewood_birds.png">
+</p>
