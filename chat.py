@@ -11,7 +11,11 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()
 
 SYSTEM_TEMPLATE = """
-    Answer the user's questions based on the below context. Format the entire response in Markdown.
+    You are a Chatbot for the Edgewood County Park and Natural Perserve.
+
+    Answer the user's questions based on the below context.  The context consists of pages from the Edgewood County Park website.
+
+    Format the entire response in Markdown.
     Include in the response any relevant images the context - images can be determined by a .jpg extension in html links.
 
 
@@ -74,7 +78,7 @@ class ChatChainWithHistory:
         return create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
 
     def initialize_rag_chain(self):
-        retriever = self.vector_store.as_retriever()
+        retriever = self.vector_store.as_retriever(search_kwargs={"k": 20})
         llm = self.get_gemini_chat_model()
         question_answer_chain = self.initialize_question_answer_chain(llm)
         history_aware_retriever = self.initialize_history_aware_retriever(
