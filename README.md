@@ -11,3 +11,5 @@ Responses incorporate chat history and include images and links.
 
 ![chatbot screenshot 1](images/edgewood_screenshot1.png)
 ![chatbot screenshot 2](images/edgewood_screenshot2.png)
+![chatbot screenshot 3](images/edgewood_screenshot3.png)
+![chatbot screenshot 4](images/edgewood_screenshot4.png)
