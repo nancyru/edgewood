@@ -7,7 +7,7 @@ from qdrant_client import models, QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 
 
-PATH_TO_JSON_DATA = "data/firecrawl_processed.json"
+PATH_TO_JSON_DATA = "data/firecrawl_result.json"
 
 
 def metadata_func(record: dict, metadata: dict) -> dict:
@@ -80,4 +80,5 @@ def create_vector_store(test=False):
     chunked_docs = chunk_docs(documents)
     vector_store = initialize_vector_store()
     vector_store.add_documents(documents=chunked_docs)
+    print(f"{len(chunked_docs)} documents loaded")
     return vector_store
